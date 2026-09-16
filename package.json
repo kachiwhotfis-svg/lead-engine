@@ -10,7 +10,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "scrape": "tsx lib/scraper/cli.ts",
-    "seed:sequences": "tsx lib/config/seedSequences.ts"
+    "seed:sequences": "tsx lib/config/seedSequences.ts",
+    "setup:airtable": "tsx lib/config/createBase.ts"
   },
   "dependencies": {
     "airtable": "^0.12.2",
