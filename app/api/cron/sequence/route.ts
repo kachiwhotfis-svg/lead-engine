@@ -3,6 +3,7 @@ import { requireCronSecret } from "@/lib/cronAuth";
 import { runColdEmailSequencer } from "@/lib/outreach/sequencer";
 import { checkForReplies } from "@/lib/outreach/email/imapWatch";
 
+export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
 export async function GET(request: NextRequest) {

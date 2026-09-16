@@ -1,3 +1,5 @@
+import type Airtable from "airtable";
+
 export const TABLES = {
   Leads: "Leads",
   Interactions: "Interactions",
@@ -14,7 +16,7 @@ export type Platform = "Cold Email" | "Instagram" | "WhatsApp";
 
 export const PLATFORMS: Platform[] = ["Cold Email", "Instagram", "WhatsApp"];
 
-export interface LeadFields {
+export interface LeadFields extends Airtable.FieldSet {
   Name?: string;
   "Business Name"?: string;
   Email?: string;
@@ -39,7 +41,7 @@ export interface LeadFields {
 export type InteractionDirection = "Outbound" | "Inbound";
 export type InteractionChannel = "Email" | "Instagram" | "WhatsApp";
 
-export interface InteractionFields {
+export interface InteractionFields extends Airtable.FieldSet {
   Lead: string[];
   Direction: InteractionDirection;
   Channel: InteractionChannel;
@@ -48,7 +50,7 @@ export interface InteractionFields {
   "Occurred At": string;
 }
 
-export interface SequenceFields {
+export interface SequenceFields extends Airtable.FieldSet {
   Platform: Platform;
   Vertical: string;
   Step: number;
@@ -60,14 +62,14 @@ export interface SequenceFields {
 
 export type BookingStatus = "Scheduled" | "Canceled" | "Completed";
 
-export interface BookingFields {
+export interface BookingFields extends Airtable.FieldSet {
   Lead: string[];
   "Calendly Event URI": string;
   "Scheduled At": string;
   Status: BookingStatus;
 }
 
-export interface StatsSnapshotFields {
+export interface StatsSnapshotFields extends Airtable.FieldSet {
   Date: string;
   "Total Leads": number;
   Cold: number;

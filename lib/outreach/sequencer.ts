@@ -5,9 +5,17 @@ import { TABLES, type LeadFields } from "../airtable/schema";
 import { getSequenceSteps } from "../airtable/sequences";
 import { logInteraction, listInteractionsForLead } from "../airtable/interactions";
 import { sendColdEmail } from "./email/send";
+import { renderTemplate } from "./template";
 
 function leadsTable() {
   return getBase()(TABLES.Leads);
+}
+
+function templateVars(lead: { fields: LeadFields }): Record<string, string> {
+  return {
+    business_name: lead.fields["Business Name"] ?? "there",
+    sender_name: process.env.FROM_NAME ?? "",
+  };
 }
 
 export interface SequenceRunResult {
@@ -33,18 +41,18 @@ export async function runColdEmailSequencer(): Promise<SequenceRunResult> {
       const firstStep = steps.find((s) => s.fields.Step === 1);
       if (!firstStep || !lead.fields.Email) continue;
 
-      await sendColdEmail({
-        to: lead.fields.Email,
-        subject: firstStep.fields.Subject ?? "",
-        body: firstStep.fields.Body,
-      });
+      const vars = templateVars(lead);
+      const subject = renderTemplate(firstStep.fields.Subject ?? "", vars);
+      const body = renderTemplate(firstStep.fields.Body, vars);
+
+      await sendColdEmail({ to: lead.fields.Email, subject, body });
 
       await logInteraction({
         Lead: [lead.id],
         Direction: "Outbound",
         Channel: "Email",
         Step: 1,
-        Content: firstStep.fields.Body,
+        Content: body,
       });
 
       await leadsTable().update(lead.id, { "Sequence Step": 1 } satisfies Partial<LeadFields>);
@@ -81,18 +89,18 @@ export async function runColdEmailSequencer(): Promise<SequenceRunResult> {
       );
       if (daysSince < nextStep.fields["Delay Days"]) continue;
 
-      await sendColdEmail({
-        to: lead.fields.Email,
-        subject: nextStep.fields.Subject ?? "",
-        body: nextStep.fields.Body,
-      });
+      const vars = templateVars(lead);
+      const subject = renderTemplate(nextStep.fields.Subject ?? "", vars);
+      const body = renderTemplate(nextStep.fields.Body, vars);
+
+      await sendColdEmail({ to: lead.fields.Email, subject, body });
 
       await logInteraction({
         Lead: [lead.id],
         Direction: "Outbound",
         Channel: "Email",
         Step: nextStep.fields.Step,
-        Content: nextStep.fields.Body,
+        Content: body,
       });
 
       await leadsTable().update(lead.id, {

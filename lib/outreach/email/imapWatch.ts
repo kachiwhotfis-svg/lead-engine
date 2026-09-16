@@ -33,7 +33,7 @@ export async function checkForReplies(): Promise<ReplyCheckResult> {
     const lock = await client.getMailboxLock("INBOX");
     try {
       const uids = await client.search({ seen: false });
-      for (const uid of uids) {
+      for (const uid of uids || []) {
         result.checked++;
         try {
           const message = await client.fetchOne(uid, { envelope: true, source: true });

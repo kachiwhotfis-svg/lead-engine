@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-canvas: 9 9 11;
+  --color-surface: 18 18 21;
+  --color-surface-raised: 26 26 31;
+  --color-border: 40 40 47;
+  --color-ink: 245 245 247;
+  --color-ink-muted: 161 161 170;
+  --color-accent: 245 158 11;
+  --color-accent-ink: 12 10 6;
+
+  --color-stage-cold: 148 163 184;
+  --color-stage-contacted: 129 140 248;
+  --color-stage-warm: 251 191 36;
+  --color-stage-booked: 45 212 191;
+  --color-stage-client: 74 222 128;
+  --color-stage-dead: 248 113 113;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: rgb(var(--color-canvas));
+  color: rgb(var(--color-ink));
+}
+
+.card {
+  @apply rounded-2xl border border-border bg-surface p-6 shadow-[0_1px_0_rgba(255,255,255,0.03)_inset];
+}
+
+.card-raised {
+  @apply rounded-2xl border border-border bg-surface-raised p-6;
+}
